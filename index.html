@@ -3,228 +3,361 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Before You Access — Exploratory Prototype</title>
+<title>Before You Access — Prototype v2.5</title>
 <style>
-:root{--bg:#08111f;--panel:#0f1b2d;--panel2:#13233a;--text:#eef4ff;--muted:#9fb0c7;--line:#263a55;--accent:#e20074;--good:#72d6a6;--warn:#f3c66b;--blue:#7fc7ff}
-*{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(circle at top right,#172945 0,#08111f 42%);color:var(--text)}
-.wrap{max-width:1040px;margin:auto;padding:28px 18px 56px}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:28px}
-.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#ff78bd;font-weight:800}.title{font-size:clamp(30px,5vw,52px);line-height:1;margin:8px 0 12px}.sub{max-width:690px;color:var(--muted);line-height:1.55}
-.badge{border:1px solid #5a2a48;background:#2a1223;color:#ffc5e2;padding:8px 11px;border-radius:999px;font-size:12px;white-space:nowrap}
-.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}@media(max-width:800px){.grid{grid-template-columns:1fr}.top{display:block}.badge{display:inline-block;margin-top:12px}}
-.card{background:linear-gradient(180deg,rgba(19,35,58,.95),rgba(12,24,40,.95));border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 18px 50px rgba(0,0,0,.18)}
-.progress{height:7px;background:#1a2a41;border-radius:99px;overflow:hidden;margin:14px 0 22px}.bar{height:100%;background:var(--accent);width:20%;transition:.25s}
-.q{font-size:22px;font-weight:800;margin-bottom:7px}.hint{color:var(--muted);font-size:14px;margin-bottom:16px}
-.options{display:grid;gap:10px}.opt{width:100%;text-align:left;background:#0d192a;border:1px solid #2a3e5a;color:var(--text);padding:14px 15px;border-radius:12px;cursor:pointer;font-size:15px}.opt:hover{border-color:#e20074;background:#161a30}.opt strong{display:block;margin-bottom:3px}.opt span{color:var(--muted);font-size:13px}
-.nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}.secondary{background:#21324a;color:#dce9fa}.ghost{background:transparent;color:#9fb0c7;border:1px solid #2a3e5a}
-.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kpi{padding:14px;border-radius:13px;background:#0b1727;border:1px solid #223751}.num{font-size:25px;font-weight:900}.lbl{font-size:12px;color:var(--muted);margin-top:3px}.finding{margin-top:14px;padding:14px;border-left:3px solid var(--accent);background:#15162a;border-radius:8px;color:#dce6f5;line-height:1.5;font-size:14px}
-.result{display:none}.route{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#ff78bd;font-weight:900}.result h2{font-size:30px;margin:7px 0 10px}.reason{font-size:16px;line-height:1.55;color:#d8e4f5}.steps{margin:18px 0;padding:0;list-style:none}.steps li{padding:11px 0;border-bottom:1px solid #233650}.steps li:before{content:"→";color:var(--accent);font-weight:900;margin-right:9px}
-.transition{margin-top:14px;padding:13px;border-radius:12px;background:#0a1728;border:1px solid #29415f;color:#cbd8ea;font-size:14px}
-.note{font-size:12px;color:#8092aa;line-height:1.5;margin-top:18px}.mini{font-size:13px;color:var(--muted);line-height:1.55}
+:root{--bg:#07101d;--panel:#0d1929;--panel2:#111f33;--text:#f1f5fb;--muted:#9eafc4;--line:#263a55;--accent:#e20074;--accent2:#ff63b1;--good:#78d7aa;--warn:#f2c46d;--blue:#78c6ff;--violet:#b9a2ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 90% 0,#1b2b49 0,#07101d 42%);color:var(--text)}
+.wrap{max-width:1120px;margin:auto;padding:28px 18px 60px}.top{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:22px}.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);font-weight:900}.title{font-size:clamp(32px,5vw,54px);line-height:1;margin:8px 0 12px}.sub{max-width:760px;color:var(--muted);line-height:1.58}.badge{border:1px solid #63304d;background:#291322;color:#ffd0e8;padding:8px 11px;border-radius:999px;font-size:12px;white-space:nowrap}.version{display:inline-block;margin-left:8px;color:#fff;background:var(--accent);padding:3px 8px;border-radius:999px;font-size:11px;vertical-align:middle}
+.principle{margin:0 0 18px;padding:15px 17px;border:1px solid #3b3659;border-radius:14px;background:linear-gradient(90deg,#17162a,#101c30);color:#dfe8f5;line-height:1.5}.principle strong{color:#fff}.grid{display:grid;grid-template-columns:1.42fr .58fr;gap:18px}@media(max-width:860px){.grid{grid-template-columns:1fr}.top{display:block}.badge{display:inline-block;margin-top:12px}}
+.card{background:linear-gradient(180deg,rgba(17,31,51,.97),rgba(10,21,36,.97));border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 18px 50px rgba(0,0,0,.18)}.progress{height:7px;background:#1a2a41;border-radius:99px;overflow:hidden;margin:14px 0 22px}.bar{height:100%;background:linear-gradient(90deg,var(--accent),#ff58ac);width:16%;transition:.25s}.q{font-size:23px;font-weight:850;margin-bottom:7px}.hint{color:var(--muted);font-size:14px;line-height:1.5;margin-bottom:16px}.options{display:grid;gap:10px}.opt{width:100%;text-align:left;background:#0b1727;border:1px solid #2a3e5a;color:var(--text);padding:14px 15px;border-radius:12px;cursor:pointer;font-size:15px;transition:.15s}.opt:hover{border-color:var(--accent);background:#15192e;transform:translateY(-1px)}.opt strong{display:block;margin-bottom:3px}.opt span{color:var(--muted);font-size:13px;line-height:1.4}.nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:850;cursor:pointer}.secondary{background:#21324a;color:#e6effc}.ghost{background:transparent;color:#aab9cc;border:1px solid #2a3e5a}.btn:hover{filter:brightness(1.08)}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kpi{padding:13px;border-radius:13px;background:#0a1626;border:1px solid #223751}.num{font-size:24px;font-weight:900}.lbl{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.3}.finding{margin-top:14px;padding:14px;border-left:3px solid var(--accent);background:#15162a;border-radius:8px;color:#dce6f5;line-height:1.5;font-size:14px}.mini{font-size:13px;color:var(--muted);line-height:1.55}.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.chip{font-size:11px;padding:6px 8px;border:1px solid #304661;border-radius:999px;color:#c6d5e8;background:#0a1728}
+.result{display:none;margin-top:18px}.route{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent2);font-weight:900}.result h2{font-size:32px;margin:7px 0 5px}.accountReq{display:inline-block;margin:5px 0 14px;padding:7px 10px;border-radius:9px;background:#0b1828;border:1px solid #304762;font-size:13px;font-weight:800}.reason{font-size:16px;line-height:1.6;color:#d9e4f3}.why{margin-top:16px;padding:14px 15px;border-radius:12px;background:#0a1728;border:1px solid #29415f;line-height:1.5;color:#cfdbeb}.steps{margin:17px 0;padding:0;list-style:none}.steps li{padding:11px 0;border-bottom:1px solid #233650;line-height:1.45}.steps li:before{content:"→";color:var(--accent);font-weight:900;margin-right:9px}.transition{margin-top:14px;padding:13px;border-radius:12px;background:#111a2b;border:1px solid #3a3b5d;color:#cbd8ea;font-size:14px;line-height:1.5}.note{font-size:12px;color:#8092aa;line-height:1.5;margin-top:18px}.validation{margin-top:18px}.validationGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:12px}@media(max-width:900px){.validationGrid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.validationGrid{grid-template-columns:1fr}}.scenario{background:#0b1727;border:1px solid #293d58;border-radius:12px;padding:12px;min-height:115px}.scenario b{font-size:13px}.scenario p{font-size:12px;color:var(--muted);line-height:1.4;margin:7px 0 0}.pass{color:var(--good);font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
 footer{margin-top:22px;color:#71849e;font-size:12px;text-align:center}
+
+/* Portfolio polish */
+body{background:
+radial-gradient(circle at 85% -10%,rgba(226,0,116,.18),transparent 30%),
+radial-gradient(circle at 15% 0,rgba(120,198,255,.10),transparent 26%),
+linear-gradient(180deg,#07101d 0%,#091321 100%)}
+.wrap{max-width:1160px;padding:34px 20px 64px}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px}
+.title{font-size:clamp(38px,6vw,64px);letter-spacing:-.035em}
+.sub{font-size:16px;line-height:1.65}
+.badge{border-color:rgba(255,99,177,.32);background:rgba(226,0,116,.10)}
+.card{border-radius:20px;box-shadow:0 22px 60px rgba(0,0,0,.24)}
+#wizard{min-height:340px}
+.q{font-size:clamp(23px,3vw,30px);line-height:1.12;letter-spacing:-.02em}
+.opt{min-height:68px;padding:15px 16px}
+.opt:focus-visible,.btn:focus-visible{outline:3px solid rgba(120,198,255,.7);outline-offset:2px}
+.result{border-color:rgba(226,0,116,.42)}
+.result h2{font-size:clamp(31px,5vw,44px);letter-spacing:-.035em}
+.validation details{margin-top:2px}
+.validation summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:800}
+.validation summary::-webkit-details-marker{display:none}
+.validation summary:after{content:"+";color:var(--accent2);font-size:22px}
+.validation details[open] summary:after{content:"–"}
+.validationBody{padding-top:14px}
+.context{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.contextItem{padding:14px 15px;background:#0a1626;border:1px solid #223751;border-radius:13px}
+.contextItem strong{display:block;margin-bottom:5px}
+.contextItem span{color:var(--muted);font-size:13px;line-height:1.5}
+footer{padding-top:18px;border-top:1px solid rgba(38,58,85,.7);line-height:1.55}
+@media(max-width:720px){.top{grid-template-columns:1fr}.context{grid-template-columns:1fr}.wrap{padding:24px 14px 44px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
     <div>
-      <div class="eyebrow">Product discovery prototype</div>
+      <div class="eyebrow">Product discovery prototype <span class="version">v2.5</span></div>
       <h1 class="title">Before You Access</h1>
-      <div class="sub">A lightweight routing assistant that helps a frontline rep identify the most efficient resolution path — and recognize when customer needs require that path to change.</div>
+      <div class="sub">A lightweight frontline decision assistant for quickly choosing the right customer-resolution path during a live interaction.</div>
     </div>
-    <div class="badge">Exploratory • No customer data</div>
+    <div class="badge">Independent portfolio concept</div>
   </div>
+
+  <div class="principle"><strong>Product principle:</strong> Reach a clear resolution path in 1–3 questions and roughly 30–45 seconds. Use self-service when it works, Retail when it is the better path, and route known exceptions to the right channel.</div>
 
   <div class="grid">
     <section class="card" id="wizard">
-      <div class="eyebrow" id="stepLabel">Step 1 of 5</div>
+      <div class="eyebrow" id="stepLabel">Decision 1</div>
       <div class="progress"><div class="bar" id="bar"></div></div>
       <div id="question"></div>
       <div class="nav">
-        <button class="btn ghost" id="restart">Restart</button>
-        <button class="btn secondary" id="back">Back</button>
+        <button type="button" class="btn ghost" id="restart">Restart</button>
+        <button type="button" class="btn secondary" id="back">Back</button>
       </div>
     </section>
 
     <aside class="card">
-      <div class="eyebrow">Discovery snapshot</div>
-      <h3>19 usable interactions</h3>
+      <div class="eyebrow">Evidence behind the MVP</div>
+      <h3 style="margin:8px 0 12px">Discovery + validation</h3>
       <div class="kpis">
-        <div class="kpi"><div class="num">89%</div><div class="lbl">involved account access</div></div>
-        <div class="kpi"><div class="num">42%</div><div class="lbl">generated Complete Points</div></div>
+        <div class="kpi"><div class="num">19</div><div class="lbl">usable discovery interactions</div></div>
+        <div class="kpi"><div class="num">5</div><div class="lbl">live validation scenarios</div></div>
+        <div class="kpi"><div class="num">89%</div><div class="lbl">discovery interactions with account access</div></div>
         <div class="kpi"><div class="num">53%</div><div class="lbl">of accesses had no Complete Points</div></div>
-        <div class="kpi"><div class="num">30m</div><div class="lbl">median interaction</div></div>
       </div>
-      <div class="finding"><strong>Key finding:</strong> No Complete Points does not automatically mean account access was unnecessary. Fulfillment, authentication, returns, payment method, device condition, and employee-only actions can change the correct route.</div>
-      <p class="mini">The prototype therefore routes by <strong>customer intent + blocker/trigger</strong>, rather than judging an interaction by sales outcome alone.</p>
+      <div class="finding"><strong>What changed:</strong> Validation showed that the app should not diagnose the entire interaction. It should surface only the decisions that can change the route — with a hard limit of <strong>1–3 questions</strong>.</div>
+      <div class="chips"><span class="chip">Self-service viability</span><span class="chip">Customer effort</span><span class="chip">Channel ownership</span><span class="chip">Dynamic routing</span></div>
     </aside>
   </div>
 
-  <section class="card result" id="result" style="margin-top:18px">
+  <section class="card result" id="result">
     <div class="route" id="routeLabel"></div>
     <h2 id="routeTitle"></h2>
+    <div class="accountReq" id="accountReq"></div>
     <div class="reason" id="routeReason"></div>
+    <div class="why" id="routeWhy"></div>
     <ul class="steps" id="routeSteps"></ul>
     <div class="transition" id="transition"></div>
-    <div class="nav"><button class="btn secondary" onclick="resetFlow()">Run another scenario</button></div>
-    <div class="note">Concept only. This prototype does not connect to T-Mobile systems, access customer accounts, determine policy eligibility, or replace official documentation, Fetch, Magenta Pulse, or manager guidance.</div>
+    <div class="nav"><button type="button" class="btn secondary" onclick="resetFlow()">Run another scenario</button></div>
+    <div class="note">Concept only. This prototype does not connect to T-Mobile systems, access customer accounts, determine policy eligibility, or replace official documentation, transaction systems, or manager guidance.</div>
   </section>
 
-  <footer>Portfolio prototype • Built from frontline discovery patterns, not production policy logic</footer>
+  <section class="card validation">
+    <div class="eyebrow">Validation evidence</div>
+    <details>
+      <summary>See the five scenarios that shaped the MVP</summary>
+      <div class="validationBody">
+        <p class="mini" style="margin-top:0">These scenarios were used to redesign the decision model and were kept separate from the original 19-interaction discovery dataset.</p>
+        <div class="validationGrid">
+      <div class="scenario"><div class="pass">✓ addressed</div><b>Damaged device / claim</b><p>Damage alone no longer forces account access; authentication and a workable assisted path are evaluated first.</p></div>
+      <div class="scenario"><div class="pass">✓ addressed</div><b>Device settings help</b><p>Technical complexity does not imply account access when device/manufacturer guidance can resolve the need.</p></div>
+      <div class="scenario"><div class="pass">✓ addressed</div><b>Unexpected bill / cancel</b><p>Account access can support diagnosis even when Retail must hand off the final action to an authorized channel.</p></div>
+      <div class="scenario"><div class="pass">✓ addressed</div><b>Replacement-device eSIM</b><p>A theoretical self-service route can be rejected when authentication is blocked and the workaround creates excessive friction.</p></div>
+      <div class="scenario"><div class="pass">✓ addressed</div><b>Protection fulfillment</b><p>Account validation is not a separate route. If verification creates the interaction and Retail can complete the need, finish the resolution in Retail.</p></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="context">
+    <div class="contextItem"><strong>What this prototype does</strong><span>Guides a frontline rep to a recommended path using only the minimum route-changing questions.</span></div>
+    <div class="contextItem"><strong>What it does not do</strong><span>It does not connect to customer systems, determine eligibility, or replace official policy and transaction tools.</span></div>
+  </section>
+
+  <footer>Independent product portfolio concept • No customer data • Not an official T-Mobile product or endorsed internal tool</footer>
 </div>
 
 <script>
-const state={history:[],answers:{}};
+const state={history:[],answers:{},context:{}};
 
 const questions={
  intent:{
-  q:"What is the customer primarily trying to do?",
-  hint:"Start with intent. We only ask follow-up questions that can change the resolution path.",
+  q:"What type of help is needed?",
+  hint:"Pick the closest match. You should have a clear path within 1–3 questions.",
   options:[
-   ["account","Account support","Billing, plan, PIN, payment, return/cancel, general account question"],
-   ["upgrade","Upgrade / device fulfillment","Replace or purchase a device, including warranty-related situations"],
-   ["aal","Add a line / new account","New line, activation, port-in, or new BAN/account setup"],
-   ["trouble","Device / service troubleshooting","Fix a device or service issue"]
+   ["info","Information or account help","Billing, plan, payment, cancellation, COR, or general account support"],
+   ["device","Device or service help","Settings, troubleshooting, activation, replacement, claim, or warranty"],
+   ["transaction","Purchase or fulfillment","Upgrade, add a line, return, payment, replacement, or same-day fulfillment"]
   ]
  },
- account:{
-  q:"Does the request require an account-level action or physical transaction?",
-  hint:"Examples in the research included PIN/rate-plan changes, equipment returns, cash payments, and service cancellation.",
+
+ accountException:{
+  q:"Is this one of these requests?",
+  hint:"Most account needs can be handled in Retail. These requests may route differently.",
   options:[
-   ["info","No — information or guidance only","The customer mainly needs an answer, explanation, or direction"],
-   ["action","Yes — account change / employee action","Something must be changed, processed, returned, or paid in store"]
+   ["cancel","Cancel line","Customer Care owns line cancellation"],
+   ["cor","COR","May depend on whether both accounts already exist"],
+   ["fiber","Fiber","Depends on setup vs existing-service support"],
+   ["none","Something else","Continue with the normal Retail decision"]
   ]
  },
- upgrade:{
-  q:"Is there a blocker that makes self-service impractical?",
-  hint:"The research showed that device condition and same-day fulfillment can change an otherwise self-serviceable path.",
+
+ corAccounts:{
+  q:"Do both accounts already exist?",
+  hint:"This is the decision point that determines whether Retail can complete the COR.",
   options:[
-   ["none","No obvious blocker","Customer can use their device and does not require immediate in-store fulfillment"],
-   ["same","Needs the device / order fulfilled today","Customer wants to leave with the device now"],
-   ["broken","Current device is unavailable or unusable","Old device is broken/off, limiting normal self-service or authentication"],
-   ["warranty","Warranty / exchange situation","The visit requires claim or exchange processing"]
+   ["yes","Yes","Retail can complete the COR"],
+   ["no","No","A new receiving account must be created first"]
   ]
  },
- aal:{
-  q:"What kind of line/account setup is this?",
-  hint:"New-account creation and transaction completion were recurring access triggers in the dataset.",
+
+ fiberType:{
+  q:"What does the customer need for Fiber?",
+  hint:"Retail can set up or schedule new service. Existing-service support routes to Fiber Customer Care.",
   options:[
-   ["existing","Existing customer adding a line","May begin with information/self-service but fulfillment or activation can change the route"],
-   ["new","New customer / new account","Requires account creation, verification, credit/port details, or transaction completion"]
+   ["new","New setup","Includes initial scheduling; Retail can handle this"],
+   ["existing","Existing service","Troubleshooting, rescheduling, cancellation, or service support"]
   ]
  },
- trouble:{
-  q:"Can the issue be resolved with guidance before accessing the account?",
-  hint:"One observed troubleshooting interaction ended without account access; another required a warranty exchange.",
+
+ accountNoAccess:{
+  q:"Is there a self-service option?",
+  hint:"Think general information, T-Life/web, or another option that does not require opening the account.",
   options:[
-   ["guide","Yes / likely","Try guidance or self-service first"],
-   ["exchange","No — warranty/exchange or employee action is required","The resolution itself requires processing"]
+   ["yes","Yes","General information, T-Life/web, or another no-account option can resolve it"],
+   ["no","No","Account access, validation, or Retail processing is needed"],
+   ["unsure","Not sure","A little more information is needed first"]
   ]
  },
- existingAal:{
-  q:"Does the customer need the rep to complete activation or in-store fulfillment?",
-  hint:"This is the trigger that moves the interaction from guidance/self-service into a transaction.",
+
+ devicePath:{
+  q:"Is there a self-service option?",
+  hint:"Think device settings, T-Life/web, manufacturer or claim tools, or guided help.",
   options:[
-   ["no","No","Information or self-service may be enough"],
-   ["yes","Yes","Activation, verification, or transaction completion is required"]
+   ["yes","Yes","Device settings, T-Life/web, manufacturer/claim tools, or guided help can resolve it"],
+   ["blocked","It’s blocked","A no-account option exists, but the customer cannot complete it right now"],
+   ["no","No","T-Mobile account access or Retail processing is needed"]
+  ]
+ },
+
+ workaround:{
+  q:"Is there a quick workaround?",
+  hint:"Use it only if it keeps things simple for the customer.",
+  options:[
+   ["yes","Yes","A quick, simple workaround can keep the customer on the no-account path"],
+   ["no","No","Using the Retail workflow is simpler for the customer"]
+  ]
+ },
+
+ transactionPath:{
+  q:"What’s the best path right now?",
+  hint:"Choose the option that gets the customer what they need most directly.",
+  options:[
+   ["digital","Digital","The customer can complete what they need through T-Life or another digital option"],
+   ["retail","Retail","Fulfillment, validation, activation, payment, return, or another Retail process is needed"],
+   ["blocked","Digital is blocked","A digital option exists, but the customer cannot complete it right now"]
+  ]
+ },
+
+ transactionWorkaround:{
+  q:"Is there a quick workaround?",
+  hint:"If the workaround makes things harder for the customer, use the Retail path.",
+  options:[
+   ["yes","Yes","A quick workaround keeps the digital path simple"],
+   ["no","No","The Retail workflow is the simpler path"]
   ]
  }
 };
 
-function showQuestion(key){
+function showQuestion(key, push=false){
+ if(push && state.current) state.history.push(state.current);
  state.current=key;
  const q=questions[key];
  const depth=state.history.length+1;
- document.getElementById("stepLabel").textContent=`Decision ${depth}`;
- document.getElementById("bar").style.width=Math.min(100,20+depth*16)+"%";
- document.getElementById("question").innerHTML=`<div class="q">${q.q}</div><div class="hint">${q.hint}</div><div class="options">${q.options.map(o=>`<button class="opt" onclick="choose('${key}','${o[0]}')"><strong>${o[1]}</strong><span>${o[2]||""}</span></button>`).join("")}</div>`;
+ document.getElementById("stepLabel").textContent=`Question ${depth} of 3 max`;
+ document.getElementById("bar").style.width=Math.min(100, depth*33.333)+"%";
+ document.getElementById("question").innerHTML=`<div class="q">${q.q}</div><div class="hint">${q.hint}</div><div class="options">${q.options.map(o=>`<button type="button" class="opt" onclick="choose('${key}','${o[0]}')"><strong>${o[1]}</strong><span>${o[2]||""}</span></button>`).join("")}</div>`;
  document.getElementById("back").style.visibility=state.history.length?"visible":"hidden";
 }
 
 function choose(key,val){
  state.answers[key]=val;
- state.history.push(key);
- if(key==="intent") return showQuestion(val);
- if(key==="account"){
-   if(val==="info") return finish("self");
-   return finish("accountAction");
+
+ if(key==="intent"){
+   if(val==="info") return showQuestion("accountException",true);
+   if(val==="device") return showQuestion("devicePath",true);
+   return showQuestion("transactionPath",true);
  }
- if(key==="upgrade"){
-   if(val==="none") return finish("assist");
-   if(val==="same") return finish("salesAccess","Upgrade → possible self-service → same-day fulfillment → transaction/account access");
-   if(val==="broken") return finish("exceptionAccess","Upgrade → broken/unavailable device → exception → employee transaction/account access");
-   if(val==="warranty") return finish("exceptionAccess","Upgrade → warranty/exchange → exception processing → account access");
+
+ if(key==="accountException"){
+   if(val==="cancel") return finish("customerCare");
+   if(val==="cor") return showQuestion("corAccounts",true);
+   if(val==="fiber") return showQuestion("fiberType",true);
+   return showQuestion("accountNoAccess",true);
  }
- if(key==="aal"){
-   if(val==="new") return finish("salesAccess","New customer → account creation/verification → sales transaction → account access");
-   return showQuestion("existingAal");
+
+ if(key==="corAccounts"){
+   if(val==="yes") return finish("retailResolution");
+   return finish("customerCare");
  }
- if(key==="existingAal"){
-   if(val==="yes") return finish("salesAccess","Existing customer AAL → activation/fulfillment → sales transaction/account access");
-   return finish("assist");
+
+ if(key==="fiberType"){
+   if(val==="new") return finish("retailResolution");
+   return finish("fiberCare");
  }
- if(key==="trouble"){
-   if(val==="guide") return finish("assist");
-   return finish("exceptionAccess","Troubleshooting → warranty/exchange required → exception processing → account access");
+
+ if(key==="accountNoAccess"){
+   if(val==="yes") return finish("assisted");
+   if(val==="no") return finish("retailResolution");
+   return finish("infoFirst");
+ }
+
+ if(key==="devicePath"){
+   if(val==="yes") return finish("assisted");
+   if(val==="blocked") return showQuestion("workaround",true);
+   return finish("retailResolution");
+ }
+
+ if(key==="workaround"){
+   if(val==="yes") return finish("workaround");
+   return finish("retailResolution");
+ }
+
+ if(key==="transactionPath"){
+   if(val==="digital") return finish("assisted");
+   if(val==="retail") return finish("retailResolution");
+   return showQuestion("transactionWorkaround",true);
+ }
+
+ if(key==="transactionWorkaround"){
+   if(val==="yes") return finish("workaround");
+   return finish("retailResolution");
  }
 }
 
 const results={
- self:{
-  label:"Recommended starting path",title:"Self-Service / Information First",
-  reason:"The customer primarily needs information or guidance and the research does not show a transaction trigger that inherently requires account access.",
-  steps:["Answer the general question using approved resources.","Point the customer to the appropriate self-service path when practical.","Access the account only if a new requirement appears that changes the route."],
-  trans:"Watch for a route-changing trigger: customer cannot use self-service, authentication fails, a physical return/payment is required, or the request becomes an account-level action."
+ assisted:{
+  label:"Recommended path",
+  title:"Self-Service / Assisted Self-Service",
+  account:"Account access: Not required",
+  reason:"A practical self-service path can resolve the customer's need without creating unnecessary effort.",
+  why:"Why this route: use digital, device-side, manufacturer, claim, or guided self-service when it works for the customer's actual situation.",
+  steps:["Guide only as much as needed.","Keep the customer on the fastest practical self-service path.","Re-route if authentication, fulfillment, or another blocker changes the situation."],
+  transition:"The goal is not to force self-service — it is to use it when it is genuinely the better path."
  },
- assist:{
-  label:"Recommended starting path",title:"Assisted Self-Service",
-  reason:"The customer may be able to complete the task without the rep taking over the account interaction, but some guidance could reduce friction.",
-  steps:["Clarify the customer's goal before opening the account.","Guide the customer through the relevant self-service or informational path.","Re-route if fulfillment, activation, device condition, verification, or another blocker makes employee action necessary."],
-  trans:"This is intentionally a starting route, not a permanent label. The prototype is designed to recognize when the interaction should transition."
+
+ workaround:{
+  label:"Recommended path",
+  title:"Assisted Self-Service + Quick Workaround",
+  account:"Account access: Not required",
+  reason:"The normal self-service path is blocked, but the blocker can be removed quickly without adding meaningful customer effort.",
+  why:"Why this route: a blocker does not automatically justify account access when a simple workaround exists.",
+  steps:["Remove the blocker using the simplest approved method.","Guide the customer through the self-service path.","Move to Retail if the workaround stops being quick or practical."],
+  transition:"Do not stretch the interaction just to avoid creating an account interaction."
  },
- accountAction:{
-  label:"Recommended route",title:"Account Action Required",
-  reason:"The request includes an account-level or physical in-store action. In the research, legitimate non-sales accesses included returns/cancellation, PIN or plan changes, and cash bill payment.",
-  steps:["Confirm the exact action the customer needs.","Use the appropriate official workflow and verification process.","Do not treat a no-Complete-Point outcome as evidence that the access was unnecessary."],
-  trans:"Observed pattern: operational requirements can make account access necessary even when the customer could theoretically self-serve another part of the journey."
+
+ retailResolution:{
+  label:"Recommended path",
+  title:"Complete in Retail",
+  account:"Account access or validation: As required",
+  reason:"Retail can complete the customer's requested outcome, and a no-account path is either unavailable, impractical, or not the customer's preferred outcome.",
+  why:"Why this route: once the interaction requires verification, fulfillment, or employee processing, complete the need efficiently rather than optimizing only for account avoidance.",
+  steps:["Complete the appropriate verification if required.","Use the official Retail workflow.","Resolve the customer's requested outcome with the least unnecessary friction."],
+  transition:"Retail is the default completion channel unless a known exception routes the customer elsewhere."
  },
- salesAccess:{
-  label:"Recommended route",title:"Sales / Transaction → Account Access",
-  reason:"The customer's goal now requires activation, fulfillment, account creation, verification, or transaction completion.",
-  steps:["Confirm the transaction requirement that changed the route.","Complete required verification and official transaction workflow.","Use existing sales/documentation tools for promo, pricing, and eligibility details."],
-  trans:"The routing assistant identifies the path; it intentionally does not duplicate promo lookup, documentation, or transaction systems."
+
+ customerCare:{
+  label:"Recommended path",
+  title:"Customer Care",
+  account:"Retail account access: Only if needed to support the handoff",
+  reason:"This request is one of the known actions that Retail cannot complete in this scenario.",
+  why:"Why this route: line cancellation and CORs that require creation of a new receiving account must be completed through Customer Care.",
+  steps:["Explain the ownership clearly.","Avoid unnecessary Retail processing that cannot complete the action.","Facilitate the cleanest handoff available."],
+  transition:"If the request changes to something Retail can complete, re-route accordingly."
  },
- exceptionAccess:{
-  label:"Recommended route",title:"Exception / Escalation → Account Access",
-  reason:"A blocker such as a broken device, warranty/exchange requirement, or other exception makes the normal self-service path impractical.",
-  steps:["Identify the blocker before beginning unnecessary troubleshooting loops.","Use the approved exception, warranty, or transaction workflow.","Escalate through existing channels when the exception exceeds the rep's available path."],
-  trans:"This route captures why two customers with the same initial intent can require completely different handling."
+
+ fiberCare:{
+  label:"Recommended path",
+  title:"Fiber Customer Care",
+  account:"Retail account access: Only if needed to support the handoff",
+  reason:"Existing Fiber troubleshooting, appointment rescheduling, cancellation, and ongoing service support are handled by Fiber Customer Care.",
+  why:"Why this route: Retail can support new Fiber setup/scheduling, but existing-service management belongs to the Fiber support channel.",
+  steps:["Confirm the customer needs existing-service support.","Avoid starting a Retail workflow that cannot finish the request.","Route the customer to Fiber Customer Care."],
+  transition:"New Fiber setup or initial scheduling remains a Retail-capable path."
+ },
+
+ infoFirst:{
+  label:"Recommended starting path",
+  title:"Clarify Before Access",
+  account:"Account access: Not required yet",
+  reason:"The rep does not yet have enough information to know whether the account is necessary.",
+  why:"Why this route: uncertainty by itself should not create an account interaction.",
+  steps:["Ask the minimum clarifying question needed to understand the request.","Use general information or device-side checks first when appropriate.","Access the account only when the need becomes account-specific."],
+  transition:"This is a brief pause for clarification — not an extended troubleshooting workflow."
  }
 };
 
-function finish(type,customTransition){
+function finish(type){
  const r=results[type];
  document.getElementById("wizard").style.display="none";
- const box=document.getElementById("result"); box.style.display="block";
+ const box=document.getElementById("result");box.style.display="block";
  document.getElementById("routeLabel").textContent=r.label;
  document.getElementById("routeTitle").textContent=r.title;
+ document.getElementById("accountReq").textContent=r.account;
  document.getElementById("routeReason").textContent=r.reason;
+ document.getElementById("routeWhy").innerHTML=`<strong>${r.why.split(':')[0]}:</strong>${r.why.includes(':')?r.why.substring(r.why.indexOf(':')+1):r.why}`;
  document.getElementById("routeSteps").innerHTML=r.steps.map(s=>`<li>${s}</li>`).join("");
- document.getElementById("transition").innerHTML=`<strong>Route logic:</strong> ${customTransition||r.trans}`;
+ document.getElementById("transition").innerHTML=`<strong>Dynamic routing:</strong> ${r.transition}`;
  box.scrollIntoView({behavior:"smooth",block:"start"});
 }
-function resetFlow(){
- state.history=[];state.answers={};
- document.getElementById("wizard").style.display="block";
- document.getElementById("result").style.display="none";
- showQuestion("intent"); window.scrollTo({top:0,behavior:"smooth"});
-}
+function resetFlow(){state.history=[];state.answers={};state.context={};document.getElementById("wizard").style.display="block";document.getElementById("result").style.display="none";showQuestion("intent");window.scrollTo({top:0,behavior:"smooth"})}
 document.getElementById("restart").onclick=resetFlow;
-document.getElementById("back").onclick=()=>{
- if(!state.history.length)return;
- state.history.pop();
- const prev=state.history.length?state.history[state.history.length-1]:"intent";
- showQuestion(prev);
-};
+document.getElementById("back").onclick=()=>{if(!state.history.length)return;const prev=state.history.pop();state.current=prev;showQuestion(prev)};
 showQuestion("intent");
 </script>
 </body>
