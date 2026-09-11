@@ -44,6 +44,9 @@ linear-gradient(180deg,#07101d 0%,#091321 100%)}
 footer{padding-top:18px;border-top:1px solid rgba(38,58,85,.7);line-height:1.55}
 @media(max-width:720px){.top{grid-template-columns:1fr}.context{grid-template-columns:1fr}.wrap{padding:24px 14px 44px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+/* Prevent a newly rendered option from looking preselected just because the pointer is still over the same screen position. */
+.suppress-hover .opt:hover{border-color:#2a3e5a;background:#0b1727;transform:none}
+#evidencePanel.after-result{margin-top:18px}
 
 </style>
 </head>
@@ -60,9 +63,8 @@ footer{padding-top:18px;border-top:1px solid rgba(38,58,85,.7);line-height:1.55}
 
   <div class="principle"><strong>Product principle:</strong> Reach a clear resolution path in 1–3 questions and roughly 30–45 seconds. Use self-service when it works, Retail when it is the better path, and route known exceptions to the right channel.</div>
 
-  <div class="grid">
+  <div class="grid" id="decisionGrid">
     <section class="card" id="wizard">
-      <div class="eyebrow" id="stepLabel">Decision 1</div>
       <div class="progress"><div class="bar" id="bar"></div></div>
       <div id="question"></div>
       <div class="nav">
@@ -71,7 +73,7 @@ footer{padding-top:18px;border-top:1px solid rgba(38,58,85,.7);line-height:1.55}
       </div>
     </section>
 
-    <aside class="card">
+    <aside class="card" id="evidencePanel">
       <div class="eyebrow">Evidence behind the MVP</div>
       <h3 style="margin:8px 0 12px">Discovery + validation</h3>
       <div class="kpis">
@@ -119,14 +121,7 @@ footer{padding-top:18px;border-top:1px solid rgba(38,58,85,.7);line-height:1.55}
     <div class="contextItem"><strong>What it does not do</strong><span>It does not connect to customer systems, determine eligibility, or replace official policy and transaction tools.</span></div>
   </section>
 
-  <footer>
-  <a href="BeforeYouAccessCaseStudy.pdf" target="_blank" rel="noopener noreferrer"
-     style="display:inline-block;margin-bottom:10px;color:#ff63b1;font-weight:800;text-decoration:none;">
-    View Product Case Study ↗
-  </a>
-  <br>
-  Independent product portfolio concept • No customer data • Not an official T-Mobile product or endorsed internal tool
-</footer>
+  <footer>Independent product portfolio concept • No customer data • Not an official T-Mobile product or endorsed internal tool</footer>
 </div>
 
 <script>
@@ -135,7 +130,7 @@ const state={history:[],answers:{},context:{}};
 const questions={
  intent:{
   q:"What type of help is needed?",
-  hint:"Pick the closest match. You should have a clear path within 1–3 questions.",
+  hint:"Pick the closest match.",
   options:[
    ["info","Information or account help","Billing, plan, payment, cancellation, COR, or general account support"],
    ["device","Device or service help","Settings, troubleshooting, activation, replacement, claim, or warranty"],
@@ -226,9 +221,12 @@ function showQuestion(key, push=false){
  state.current=key;
  const q=questions[key];
  const depth=state.history.length+1;
- document.getElementById("stepLabel").textContent=`Question ${depth} of 3 max`;
  document.getElementById("bar").style.width=Math.min(100, depth*33.333)+"%";
  document.getElementById("question").innerHTML=`<div class="q">${q.q}</div><div class="hint">${q.hint}</div><div class="options">${q.options.map(o=>`<button type="button" class="opt" onclick="choose('${key}','${o[0]}')"><strong>${o[1]}</strong><span>${o[2]||""}</span></button>`).join("")}</div>`;
+ const wizard=document.getElementById("wizard");
+ wizard.classList.add("suppress-hover");
+ const restoreHover=()=>wizard.classList.remove("suppress-hover");
+ wizard.addEventListener("pointermove",restoreHover,{once:true});
  document.getElementById("back").style.visibility=state.history.length?"visible":"hidden";
 }
 
@@ -353,6 +351,9 @@ function finish(type){
  const r=results[type];
  document.getElementById("wizard").style.display="none";
  const box=document.getElementById("result");box.style.display="block";
+ const evidence=document.getElementById("evidencePanel");
+ box.insertAdjacentElement("afterend",evidence);
+ evidence.classList.add("after-result");
  document.getElementById("routeLabel").textContent=r.label;
  document.getElementById("routeTitle").textContent=r.title;
  document.getElementById("accountReq").textContent=r.account;
@@ -362,7 +363,17 @@ function finish(type){
  document.getElementById("transition").innerHTML=`<strong>Dynamic routing:</strong> ${r.transition}`;
  box.scrollIntoView({behavior:"smooth",block:"start"});
 }
-function resetFlow(){state.history=[];state.answers={};state.context={};document.getElementById("wizard").style.display="block";document.getElementById("result").style.display="none";showQuestion("intent");window.scrollTo({top:0,behavior:"smooth"})}
+function resetFlow(){
+ state.history=[];state.answers={};state.context={};
+ const grid=document.getElementById("decisionGrid");
+ const evidence=document.getElementById("evidencePanel");
+ grid.appendChild(evidence);
+ evidence.classList.remove("after-result");
+ document.getElementById("wizard").style.display="block";
+ document.getElementById("result").style.display="none";
+ showQuestion("intent");
+ window.scrollTo({top:0,behavior:"smooth"})
+}
 document.getElementById("restart").onclick=resetFlow;
 document.getElementById("back").onclick=()=>{if(!state.history.length)return;const prev=state.history.pop();state.current=prev;showQuestion(prev)};
 showQuestion("intent");
